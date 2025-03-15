@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SourceController;
+use App\Http\Controllers\AuthorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +30,8 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 Route::get('/user', [AuthController::class, 'getUser']);
 Route::get('/articles', [ArticleController::class, 'getArticles']);
 
-
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/sources', [SourceController::class, 'index']);
+Route::get('/authors', [AuthorController::class, 'index']);
 
 
