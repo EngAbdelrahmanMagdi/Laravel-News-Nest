@@ -31,13 +31,13 @@ class ArticleController extends Controller
 
         if (!$hasPreferences) {
             // No preferences – return all articles
-            $articles = Article::all();
+            $articles = Article::with(['category:id,name', 'source:id,name', 'author:id,name'])->get();
             return response()->json($articles);
         }
 
         // Build the query to filter articles based on any matching preference
-        $query = Article::query();
-
+        $query = Article::with(['category:id,name', 'source:id,name', 'author:id,name']);
+    
         if ($user->preferredCategories->isNotEmpty()) {
             $categoryIds = $user->preferredCategories->pluck('id');
             $query->orWhereIn('category_id', $categoryIds);
