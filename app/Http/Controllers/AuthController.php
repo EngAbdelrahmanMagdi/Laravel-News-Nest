@@ -203,7 +203,7 @@ class AuthController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        $user = $this->getUserByToken($token)->with(['preferredCategories', 'preferredSources', 'preferredAuthors'])->first();
+        $user = $this->getUserByToken($token);
         if (!$user) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
