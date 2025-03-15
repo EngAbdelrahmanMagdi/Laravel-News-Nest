@@ -7,6 +7,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\StorePreferencesRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -129,6 +130,9 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * Forgot password.
+    */
     public function forgotPassword(ForgotPasswordRequest $request)
     {            
         DB::table('password_reset_tokens')->where('email', $request->email)->delete();
@@ -151,6 +155,9 @@ class AuthController extends Controller
         return response()->json(['message' => 'Password reset link sent.']);
     }
 
+    /**
+     * Reset password.
+    */
     public function resetPassword(ResetPasswordRequest $request)
     {
         // Check if token exists
@@ -186,6 +193,9 @@ class AuthController extends Controller
         return response()->json(['message' => 'Password reset successful.']);
     }
 
+    /**
+     * Get User.
+    */
     public function getUser(Request $request)
     {
         $token = $request->bearerToken();
@@ -201,6 +211,9 @@ class AuthController extends Controller
         return response()->json($user);
     }
 
+    /**
+     * Get User by token.
+    */
     private function getUserByToken($token)
     {
         return User::whereHas('tokens', function ($query) use ($token) {
@@ -208,4 +221,32 @@ class AuthController extends Controller
         })->first();
     }
 
+    /**
+     * Store Preferences.
+    */
+    public function storePreferences(StorePreferencesRequest $request)
+    {
+        try {
+            $token = $request->bearerToken();
+            if (!$token) {
+                Log::error("Logout Failed: No Token Provided");
+                return response()->json(['message' => 'Unauthorized.'], 401);
+            }
+    
+            $user = $this->getUserByToken($token);
+            if (!$user) {
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
+    
+            // Sync the user preferences
+            $user->preferredCategories()->sync($request->categories ?? []);
+            $user->preferredSources()->sync($request->sources ?? []);
+            $user->preferredAuthors()->sync($request->authors ?? []);
+    
+            return response()->json(['message' => 'Preferences saved successfully']);
+        } catch (\Exception $e) {
+            Log::error("Failed to store preferences", ['error' => $e->getMessage()]);
+            return response()->json(['message' => 'Failed to save preferences.'], 500);
+        }
+    }    
 }

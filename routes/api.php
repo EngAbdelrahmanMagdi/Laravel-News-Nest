@@ -33,5 +33,6 @@ Route::get('/articles', [ArticleController::class, 'getArticles']);
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/sources', [SourceController::class, 'index']);
 Route::get('/authors', [AuthorController::class, 'index']);
+Route::post('/user/preferences', [AuthController::class, 'storePreferences']);
 
 
