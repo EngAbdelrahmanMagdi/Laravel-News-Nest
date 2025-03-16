@@ -1,33 +1,13 @@
-# Use official PHP image with required extensions
-FROM php:8.1-fpm
+# Use PHP 8.1 FPM (FastCGI Process Manager) based on Alpine Linux  
+FROM php:8.1-fpm-alpine
 
-# Set working directory
-WORKDIR /var/www
+# Install Composer  
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    libpq-dev \
-    zip \
-    unzip \
-    git \
-    curl \
-    libpng-dev \
-    && docker-php-ext-install pdo pdo_pgsql gd
+# Install necessary dependencies:
+RUN set -ex \
+    && apk --no-cache add postgresql-dev nodejs yarn npm caddy \
+    && docker-php-ext-install pdo pdo_pgsql
 
-# Install Composer
-COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
-
-# Copy Laravel application files
-COPY . .
-
-# Install PHP dependencies
-RUN composer install --no-dev --no-scripts --optimize-autoloader
-
-# Set permissions
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-
-# Expose port
-EXPOSE 9000
-
-# Start PHP-FPM
-CMD ["php-fpm"]
+# Set the working directory inside the container     
+WORKDIR /var/www/html
