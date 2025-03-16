@@ -22,10 +22,10 @@ cp .env.example .env
 ```
 docker compose up -d --build
 ```
-
+###### Running an app in Docker may impact user experience depending on your system resources and configuration. 
 #
 
-### Method 2 
+### Method 2 (Better User Experience)
 
 - Clone the project using this command. 
 
