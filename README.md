@@ -4,6 +4,29 @@
 
 ## To run this project
 
+### Method 1
+
+- Clone the project using this command. 
+
+```
+git clone https://github.com/EngAbdelrahmanMagdi/Laravel-News-Nest.git
+```
+
+
+- Copy .env.example content inside .env file with your own credentials for the keys.
+```
+cp .env.example .env
+```    
+
+- Start Application using Docker by this command.
+```
+docker compose up -d --build
+```
+
+#
+
+### Method 2 
+
 - Clone the project using this command. 
 
 ```
