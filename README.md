@@ -73,11 +73,11 @@ php artisan serve
 ## Relationships 
 
 - Users have many Categories, Sources, and Authors through pivot tables (category_user, source_user, author_user).
-- 
+  
 - Users have password reset tokens (password_reset_tokens) linked via email.
-- 
+
 - Authors, Categories, and Sources have many Articles.
-- 
+  
 - Articles reference Authors, Categories, and Sources using foreign keys.
   
   ![MyReadsImg](public/NewsNest-ERD.png)
